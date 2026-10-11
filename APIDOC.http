@@ -1,0 +1,65 @@
+# user end points ==========================
+
+#api call for registering user
+###
+POST http://127.0.0.1:8000/tracker/admin-register/
+Content-Type: application/json
+
+{
+    "username":"user2",
+    "email":"user2@gmail.com",
+    "password":"user@123"
+}
+
+#api call for getting user details
+###
+GET http://127.0.0.1:8000/tracker/getme/
+Accept: application/json
+Authorization: Basic user1:user@123
+
+
+# Foodlog endpoints ============================
+
+#api call for listing foodlogs
+###
+GET http://127.0.0.1:8000/tracker/foodlogs/
+Accept: application/json
+Authorization: Basic user1:user@123
+
+#api call for posting foodlogs
+###
+POST http://127.0.0.1:8000/tracker/foodlogs/
+Content-Type: application/json
+Authorization: Basic user1:user@123
+
+{
+    "title": "Apple",
+    "calorie": 95,
+    "meal_type": "Snacks",
+    "serving_size": "180"
+}
+
+# api call for retriving specific foodlogs
+###
+GET http://127.0.0.1:8000/tracker/foodlogs/1/
+Accept: application/json
+Authorization: Basic user1:user@123
+
+# api call for upadating foodlogs
+###
+PUT http://127.0.0.1:8000/tracker/foodlogs/1/
+Content-Type: application/json
+Authorization: Basic user1:user@123
+
+{
+    "title": "Chicken Fried Rice",
+    "calorie": 450,
+    "meal_type": "Lunch",
+    "serving_size": "300"
+}
+
+# api call for deleting foodlog
+###
+DELETE http://127.0.0.1:8000/tracker/foodlogs/4/
+Accept: application/json
+Authorization: Basic user1:user@123
