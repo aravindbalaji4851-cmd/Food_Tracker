@@ -7,6 +7,7 @@ from rest_framework import authentication,permissions
 
 from tracker.serializer import UserSerializer,FoodlogSerializer
 from tracker.models import Foodlog
+from tracker.permissions import IsOwner
 
 class SignUpView(APIView):
 
@@ -44,7 +45,7 @@ class GetMeView(APIView):
 
 class FoodlogCreateListView(APIView):
 
-    authentication_classes = [authentication.BasicAuthentication]
+    authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self,request):
@@ -71,12 +72,14 @@ class FoodlogCreateListView(APIView):
 
 class FoodlogRetrieveUpdateDeleteView(APIView):
 
-    authentication_classes = [authentication.BasicAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [IsOwner]
 
     def get(self,request,pk=None):
 
         qs = get_object_or_404(Foodlog,id=pk)
+
+        self.check_object_permissions(request,qs)
 
         serializer = FoodlogSerializer(qs)
 
@@ -85,6 +88,8 @@ class FoodlogRetrieveUpdateDeleteView(APIView):
     def put(self,request,pk=None):
 
         instance = get_object_or_404(Foodlog,id=pk)
+
+        self.check_object_permissions(request,instance)
         
         form_data = request.data
 
@@ -101,6 +106,8 @@ class FoodlogRetrieveUpdateDeleteView(APIView):
     def delete(self,request,pk=None):
 
         instance = get_object_or_404(Foodlog,id=pk)
+
+        self.check_object_permissions(request,instance)
 
         instance.delete()
 

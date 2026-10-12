@@ -11,6 +11,19 @@ Content-Type: application/json
     "password":"user@123"
 }
 
+
+#api call for token generation
+###
+POST http://127.0.0.1:8000/tracker/token/
+Content-Type: application/json
+
+{
+    "username":"user2",
+    "password":"user@123"
+}
+
+
+
 #api call for getting user details
 ###
 GET http://127.0.0.1:8000/tracker/getme/
@@ -24,13 +37,15 @@ Authorization: Basic user1:user@123
 ###
 GET http://127.0.0.1:8000/tracker/foodlogs/
 Accept: application/json
-Authorization: Basic user1:user@123
+# Authorization: Basic user1:user@123
+Authorization: Token 4cc6c04de7eef33756b4748c2aa4108741da83cb
+
 
 #api call for posting foodlogs
 ###
 POST http://127.0.0.1:8000/tracker/foodlogs/
 Content-Type: application/json
-Authorization: Basic user1:user@123
+Authorization: Token 9dc9a6fb768f09a0cbb35720612c2469e66e926f
 
 {
     "title": "Apple",
@@ -41,15 +56,15 @@ Authorization: Basic user1:user@123
 
 # api call for retriving specific foodlogs
 ###
-GET http://127.0.0.1:8000/tracker/foodlogs/1/
+GET http://127.0.0.1:8000/tracker/foodlogs/5/
 Accept: application/json
-Authorization: Basic user1:user@123
+Authorization: Token 4cc6c04de7eef33756b4748c2aa4108741da83cb
 
 # api call for upadating foodlogs
 ###
 PUT http://127.0.0.1:8000/tracker/foodlogs/1/
 Content-Type: application/json
-Authorization: Basic user1:user@123
+Authorization: Token 4cc6c04de7eef33756b4748c2aa4108741da83cb
 
 {
     "title": "Chicken Fried Rice",
@@ -62,4 +77,5 @@ Authorization: Basic user1:user@123
 ###
 DELETE http://127.0.0.1:8000/tracker/foodlogs/4/
 Accept: application/json
-Authorization: Basic user1:user@123
+Authorization: Token 4cc6c04de7eef33756b4748c2aa4108741da83cb
+
