@@ -45,13 +45,13 @@ Authorization: Token 4cc6c04de7eef33756b4748c2aa4108741da83cb
 ###
 POST http://127.0.0.1:8000/tracker/foodlogs/
 Content-Type: application/json
-Authorization: Token 9dc9a6fb768f09a0cbb35720612c2469e66e926f
+Authorization: Token 4cc6c04de7eef33756b4748c2aa4108741da83cb
 
 {
-    "title": "Apple",
-    "calorie": 95,
-    "meal_type": "Snacks",
-    "serving_size": "180"
+    "title": "Idli",
+    "calorie": 180,
+    "meal_type": "Breakfast",
+    "serving_size": "150"
 }
 
 # api call for retriving specific foodlogs
@@ -79,3 +79,9 @@ DELETE http://127.0.0.1:8000/tracker/foodlogs/4/
 Accept: application/json
 Authorization: Token 4cc6c04de7eef33756b4748c2aa4108741da83cb
 
+
+# api call for foodlog summary
+###
+GET http://127.0.0.1:8000/tracker/foodlogs/summary/
+Accept: application/json
+Authorization: Token 4cc6c04de7eef33756b4748c2aa4108741da83cb

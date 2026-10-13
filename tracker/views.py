@@ -1,5 +1,6 @@
 from django.shortcuts import render,get_object_or_404
 from django.contrib.auth.models import User
+from django.db.models import Sum
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -8,6 +9,8 @@ from rest_framework import authentication,permissions
 from tracker.serializer import UserSerializer,FoodlogSerializer
 from tracker.models import Foodlog
 from tracker.permissions import IsOwner
+
+from datetime import datetime
 
 class SignUpView(APIView):
 
@@ -112,3 +115,47 @@ class FoodlogRetrieveUpdateDeleteView(APIView):
         instance.delete()
 
         return Response({"message":"deleted..."})
+
+
+class FoodlogSummaryView(APIView):
+
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self,request):
+
+        response_data = {
+            "todays_total_calorie":0
+        }
+
+        current_date = datetime.now().date()
+
+        current_month = datetime.now().month
+
+        current_year = datetime.now().year
+
+        todays_calorie = Foodlog.objects.filter(owner=request.user,created_at__date=current_date)
+
+        if todays_calorie:
+
+            todays_total_calorie = todays_calorie.values("calorie").aggregate(total=Sum("calorie")).get("total")
+
+            todays_category_summary = todays_calorie.values("meal_type").annotate(calorie=Sum("calorie"))
+
+            response_data["todays_total_calorie"] =todays_total_calorie 
+            response_data["todays_category_summary"] =todays_category_summary
+
+        monthly_calorie = Foodlog.objects.filter(owner=request.user,created_at__month=current_month,created_at__year=current_year)
+
+        if monthly_calorie:
+
+            monthly_total_calorie = monthly_calorie.values("calorie").aggregate(total=Sum("calorie")).get("total")
+
+            monthly_category_summary = monthly_calorie.values("meal_type").annotate(calorie=Sum("calorie"))
+
+            response_data["monthly_total_calorie"] = monthly_total_calorie
+
+            response_data["monthly_category_summary"] = monthly_category_summary
+
+
+        return Response(data=response_data)
