@@ -85,3 +85,9 @@ Authorization: Token 4cc6c04de7eef33756b4748c2aa4108741da83cb
 GET http://127.0.0.1:8000/tracker/foodlogs/summary/
 Accept: application/json
 Authorization: Token 4cc6c04de7eef33756b4748c2aa4108741da83cb
+
+# api call for summary
+###
+GET http://127.0.0.1:8000/tracker/dietplan/
+Accept: application/json
+Authorization: Token 4cc6c04de7eef33756b4748c2aa4108741da83cb

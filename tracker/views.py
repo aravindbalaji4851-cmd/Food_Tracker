@@ -9,6 +9,7 @@ from rest_framework import authentication,permissions
 from tracker.serializer import UserSerializer,FoodlogSerializer
 from tracker.models import Foodlog
 from tracker.permissions import IsOwner
+from tracker.ai_service import get_dietplan
 
 from datetime import datetime
 
@@ -157,5 +158,36 @@ class FoodlogSummaryView(APIView):
 
             response_data["monthly_category_summary"] = monthly_category_summary
 
+
+        return Response(data=response_data)
+
+class DietPlanView(APIView):
+
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self,request):
+
+        response_data = {
+            "monthly_total_calorie":0
+        }
+
+        current_month = datetime.now().month
+        current_year = datetime.now().year
+
+        monthly_data = Foodlog.objects.filter(owner=request.user,created_at__month=current_month,created_at__year=current_year)
+
+        if monthly_data:
+
+            monthly_total_calorie = monthly_data.values("calorie").aggregate(total=Sum("calorie")).get("total")
+
+            monthly_category_summary = monthly_data.values("meal_type").annotate(total=Sum("calorie"))
+
+            response_data["monthly_total_calorie"]=monthly_total_calorie
+            response_data["monthly_category_summary"]=monthly_category_summary
+
+            diet_plan = get_dietplan(response_data)
+
+            response_data["diet_plan"] = diet_plan
 
         return Response(data=response_data)
